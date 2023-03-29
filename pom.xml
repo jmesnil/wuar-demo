@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wildfly-up-and-running</groupId>
     <artifactId>wuar-demo</artifactId>
-    <version>1.0.0.Final</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
     <description>Demo to get WildFly Up and Running</description>
 
@@ -121,19 +121,32 @@
                         <layer>jaxrs-server</layer>
                         <layer>microprofile-platform</layer>
                     </layers>
-                    <image>
-                        <registry>${container.registry}</registry>
-                        <group>${project.groupId}</group>
-                    </image>
                     <runtime-name>ROOT.war</runtime-name>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>image</goal>
+                            <goal>package</goal>
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <version>1.11.0</version>
+                <configuration>
+                    <helm>
+                        <sourceDir>src/main/</sourceDir>
+                        <dependencies>
+                            <dependency>
+                                <name>wildfly</name>
+                                <version>2.3.1</version>
+                                <repository>https://docs.wildfly.org/wildfly-charts/</repository>
+                            </dependency>
+                        </dependencies>
+                    </helm>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
